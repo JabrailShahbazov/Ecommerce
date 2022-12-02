@@ -18,13 +18,11 @@ namespace EcommerceApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task Get()
+        public async Task<IActionResult> Get()
         {
-          var products = await _productReadRepository.GetByIdAsync("7132799d-0e91-4ac2-b6c9-7f205ce8ada4");
+            var products = _productReadRepository.GetAll();
 
-          if (products != null) products.Name = "Menimsen";
-
-          await _productWriteRepository.SaveAsync();
+            return Ok(products);
         }
     }
 }

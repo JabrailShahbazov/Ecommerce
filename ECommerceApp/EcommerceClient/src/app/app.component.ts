@@ -1,6 +1,4 @@
 import {Component} from '@angular/core';
-import {ToastrService} from "ngx-toastr";
-import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-root',
@@ -9,7 +7,10 @@ import {NgxSpinnerService} from "ngx-spinner";
 })
 export class AppComponent {
   title = 'EcommerceClient';
-constructor(private tostr: ToastrService,private spinner: NgxSpinnerService) {
-}
+
+  constructor() {
+  }
 
 }
+
+
