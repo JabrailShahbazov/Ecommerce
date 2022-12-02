@@ -1,4 +1,26 @@
-<app-header></app-header>
-<app-sidebar></app-sidebar>
-<app-footer></app-footer>
-<router-outlet></router-outlet>
+<mat-sidenav-container fullscreen>
+
+  <mat-sidenav #sidenav mode="side" opened class="sw-sidenav">
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
+
+  <mat-toolbar color="primary" #toolbar>
+    <button
+      type="button"
+      mat-icon-button
+      (click)="sidenav.toggle()"
+      title="Open sidenav">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <app-header></app-header>
+  </mat-toolbar>
+
+  <div class="content" #main (click)="sidenav.close()">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="footer" #footer>
+    <app-footer></app-footer>
+  </div>
+
+</mat-sidenav-container>

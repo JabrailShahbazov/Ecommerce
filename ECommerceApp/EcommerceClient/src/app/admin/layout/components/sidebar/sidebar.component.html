@@ -1,14 +1,14 @@
-<ul>
-  <li>
-    <a routerLink="/admin">Dashboard></a>
-  </li>
-  <li>
-    <a routerLink="customers">Customers</a>
-  </li>
-  <li>
-    <a routerLink="products">Products</a>
-  </li>
-  <li>
-    <a routerLink="orders">Orders</a>
-  </li>
-</ul>
+<mat-selection-list [multiple]="false">
+  <mat-list-option routerLink="/admin">
+    Dashboard
+  </mat-list-option>
+  <mat-list-option routerLink="customers">
+    Customers
+  </mat-list-option>
+  <mat-list-option routerLink="products">
+    Products
+  </mat-list-option>
+  <mat-list-option routerLink="orders">
+    Orders
+  </mat-list-option>
+</mat-selection-list>
