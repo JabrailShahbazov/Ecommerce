@@ -1,6 +1,9 @@
+using System.Net;
 using Ecommerce.Application.Repositories;
+using Ecommerce.Application.ViewModels.Product;
 using EcommerceApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceApi.Api.Controllers
 {
@@ -20,9 +23,53 @@ namespace EcommerceApi.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var products = _productReadRepository.GetAll();
+            var products = _productReadRepository.GetAll(false);
 
-            return Ok(products);
+            return Ok(await products.ToListAsync());
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            return Ok(await _productReadRepository.GetByIdAsync(id,false));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(CreateProductVM model)
+        {
+            await _productWriteRepository.AddAsync(new Product()
+            {
+                Name = model.Name,
+                Stock = model.Stock,
+                Price = model.Price
+            });
+
+            await _productWriteRepository.SaveAsync();
+            return StatusCode((int)HttpStatusCode.Created);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(UpdateProductVM model)
+        {
+            var product = await _productReadRepository.GetByIdAsync(model.Id);
+
+            if (product != null)
+            {
+                product.Stock = model.Stock;
+                product.Name = model.Name;
+                product.Price = model.Price;
+            }
+
+            await _productWriteRepository.SaveAsync();
+            return StatusCode((int)HttpStatusCode.NoContent);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _productWriteRepository.RemoveAsync(id);
+            await _productWriteRepository.SaveAsync();
+            return Ok();
         }
     }
 }
