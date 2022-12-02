@@ -21,22 +21,42 @@ export class HttpClientService {
     if (requestParameters.fullEndPoint) {
       url = requestParameters.fullEndPoint
     } else {
-      debugger
       url = `${this.url(requestParameters)}${id != null ? `/${id}` : ""}`;
     }
 
     return this.httpClient.get<T>(url, {headers: requestParameters.headers})
   }
 
-  post<T>(requestParameters: RequestParameters) {
+  post<T>(requestParameters: Partial<RequestParameters>, body: Partial<T>): Observable<T> {
+    let url: string = '';
+    if (requestParameters.fullEndPoint) {
+      url = requestParameters.fullEndPoint
+    } else {
+      url = `${this.url(requestParameters)}`;
+    }
+
+    return this.httpClient.post<T>(url, body, {headers: requestParameters.headers})
   }
 
-  put<T>(requestParameters: RequestParameters) {
-
+  put<T>(requestParameters: Partial<RequestParameters>, body: Partial<T>): Observable<T> {
+    let url: string = '';
+    if (requestParameters.fullEndPoint) {
+      url = requestParameters.fullEndPoint
+    } else {
+      url = `${this.url(requestParameters)}`;
+    }
+    return this.httpClient.put<T>(url, body, {headers: requestParameters.headers})
   }
 
-  delete<T>(requestParameters: RequestParameters) {
+  delete<T>(requestParameters: RequestParameters, id?: string): Observable<T> {
+    let url: string = '';
+    if (requestParameters.fullEndPoint) {
+      url = requestParameters.fullEndPoint
+    } else {
+      url = `${this.url(requestParameters)}/${id}`;
+    }
 
+    return this.httpClient.delete<T>(url, {headers: requestParameters.headers})
   }
 }
 

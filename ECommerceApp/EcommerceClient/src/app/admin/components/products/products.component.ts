@@ -16,7 +16,9 @@ export class ProductsComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.httpClientService.get({controller: "product"},"9d0b0608-ecd2-4193-8859-f882f935c0f3").subscribe(
+    this.httpClientService.get({
+     fullEndPoint:"https://jsonplaceholder.typicode.com/posts"
+    }).subscribe(
       data => {
         console.log(data)
       }

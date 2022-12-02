@@ -23,17 +23,12 @@ public class EcommerceDbContext : DbContext
 
         foreach (var data in datas)
         {
-            switch (data.State)
+            _ = data.State switch
             {
-                case EntityState.Added:
-                    data.Entity.CreateDate = DateTime.UtcNow;
-                    break;
-                case EntityState.Modified:
-                    data.Entity.UpdatedDate = DateTime.UtcNow;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                EntityState.Added => data.Entity.CreateDate = DateTime.UtcNow,
+                EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
+                _ => DateTime.UtcNow
+            };
         }
 
         return await base.SaveChangesAsync(cancellationToken);
