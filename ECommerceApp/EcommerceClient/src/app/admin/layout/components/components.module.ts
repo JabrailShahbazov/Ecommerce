@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {HeaderComponent} from './header/header.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {FooterComponent} from './footer/footer.component';
+import {RouterLink, RouterModule} from "@angular/router";
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {FooterComponent} from './footer/footer.component';
     FooterComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
 export class ComponentsModule {
