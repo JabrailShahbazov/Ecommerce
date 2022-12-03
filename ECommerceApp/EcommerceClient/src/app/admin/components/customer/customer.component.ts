@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {BaseComponent} from "../../../base/base.component";
 import {NgxSpinnerService} from "ngx-spinner";
 
@@ -9,8 +9,8 @@ import {NgxSpinnerService} from "ngx-spinner";
 })
 export class CustomerComponent extends BaseComponent implements OnInit {
 
-  constructor(spinner: NgxSpinnerService) {
-    super(spinner);
+  constructor(injector: Injector) {
+    super(injector);
   }
 
   ngOnInit(): void {

@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Core\EcommerceApi.Application\EcommerceApi.Application.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\EcommerceApi.Infrastructure\EcommerceApi.Infrastructure.csproj" />
       <ProjectReference Include="..\..\Infrastructure\EcommerceApi.Persistence\EcommerceApi.Persistence.csproj" />
     </ItemGroup>
 

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {NgxSpinnerService} from "ngx-spinner";
 import {BaseComponent} from "../../../base/base.component";
 
@@ -9,12 +9,13 @@ import {BaseComponent} from "../../../base/base.component";
 })
 export class DashboardComponent extends BaseComponent implements OnInit {
 
-  constructor(spinner: NgxSpinnerService) {
-    super(spinner);
+  constructor(injector: Injector) {
+    super(injector);
   }
 
 
   ngOnInit(): void {
+    this.toastrService.info("Dashboard Work")
   }
 
 }

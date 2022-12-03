@@ -1,20 +1,23 @@
 import {NgxSpinnerService} from "ngx-spinner";
+import {Injector} from "@angular/core";
+import {ToastrService} from "ngx-toastr";
+import {spinnerType} from "./spinnerType";
 
 export class BaseComponent {
-  constructor(private spinner: NgxSpinnerService) {
+  spinnerService: NgxSpinnerService;
+  toastrService: ToastrService
+
+  constructor(injector: Injector) {
+    this.spinnerService = injector.get(NgxSpinnerService)
+    this.toastrService = injector.get(ToastrService)
   }
 
   showSpinner(spinnerNameType: spinnerType) {
-    this.spinner.show(spinnerNameType)
+    this.spinnerService.show(spinnerNameType)
   }
 
   hideSpinner(spinnerNameType: spinnerType) {
-    this.spinner.hide(spinnerNameType)
+    this.spinnerService.hide(spinnerNameType)
   }
 }
 
-export enum spinnerType {
-  SquareLoader = "s1",
-  "SquareJellyBox" = "s2",
-  BallAtom = "s3"
-}
