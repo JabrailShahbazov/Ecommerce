@@ -2,10 +2,12 @@ import {AfterViewInit, Component, Injector, OnInit, TemplateRef, ViewChild} from
 import {BaseComponent} from "../../../base/base.component";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
-import {ListProduct} from "../../../contracts/admin/products/list-product";
+import {ProductListDto} from "../../../contracts/admin/products/list-product";
 import {ProductService} from "../../../services/common/modules/product.service";
 import {spinnerType} from "../../../base/spinnerType";
 import {DatePipe} from "@angular/common";
+import {PaginationDto} from "../../../contracts/common/pagination-dto";
+import {PagedResultDto} from "../../../contracts/common/paged-result-dto";
 
 @Component({
   selector: 'app-products',
@@ -30,24 +32,38 @@ export class ProductsComponent extends BaseComponent implements OnInit, AfterVie
     super(injector);
   }
 
-  ngAfterViewInit() {
-    this.getAllProducts()
+  async ngAfterViewInit() {
+    await this.getAllProducts()
   }
 
   ngOnInit(): void {
   }
 
-  getAllProducts() {
+  async getAllProducts() {
     this.showSpinner(spinnerType.BallAtom)
-    this.productService.get(() => {
+
+    let page = new PaginationDto
+
+    page.page = this.paginator.pageIndex == null ? 0 : this.paginator.pageIndex
+    page.size = this.paginator.pageSize == null ? 5 : this.paginator.pageSize
+    const allProducts = await this.productService.get(page, () => {
       this.hideSpinner(spinnerType.BallAtom);
     }, errorMessage => {
       this.hideSpinner(spinnerType.BallAtom);
       this.toastrService.error(errorMessage)
-    }).then(r => {
-      this.dataSource = new MatTableDataSource<ListProduct>(r)
-      this.dataSource.paginator = this.paginator;
     })
+
+    let Plist: ProductListDto = new ProductListDto()
+    let data: any
+    if (allProducts?.items) {
+      data = Object.assign(allProducts?.items, Plist)
+    }
+
+    this.dataSource = new MatTableDataSource<ProductListDto>(data)
+    this.paginator.length = allProducts?.totalCount
   }
 
+  async pageChanged() {
+    await this.getAllProducts()
+  }
 }

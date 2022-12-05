@@ -1,4 +1,6 @@
 using System.Net;
+using Ecommerce.Application.Common.Concrates;
+using Ecommerce.Application.Common.Consecrate;
 using Ecommerce.Application.Repositories;
 using Ecommerce.Application.ViewModels.Product;
 using EcommerceApi.Domain.Entities;
@@ -21,19 +23,26 @@ namespace EcommerceApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] PaginationDto pagination)
         {
-            var products = _productReadRepository.GetAll(false);
 
-            return Ok(await products.Select(p => new
+            var productCount = await _productReadRepository.GetCount(false);
+
+            var listProducts = await _productReadRepository.GetAll(false).Select(p => new ProductListDto()
             {
-                p.Id,
-                p.Name,
-                p.Stock,
-                p.Price,
-                p.CreateDate,
-                p.UpdatedDate
-            }).OrderByDescending(o =>o.CreateDate).ToListAsync());
+                Id = p.Id.ToString(),
+                Name = p.Name,
+                Stock = p.Stock,
+                Price = p.Price,
+                CreateDate = p.CreateDate,
+                UpdatedDate = p.UpdatedDate
+            }).OrderByDescending(o => o.CreateDate).Skip(pagination.Size * pagination.Page).Take(pagination.Size).ToListAsync();
+            var a = new PagedResultDto<ProductListDto>()
+            {
+                TotalCount = productCount,
+                Items = listProducts
+            };
+            return Ok(a);
         }
 
         [HttpGet("{id}")]

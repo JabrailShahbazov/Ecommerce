@@ -3,7 +3,9 @@ import {HttpClientService} from "../http-client.service";
 import {CreateProduct} from "../../../contracts/admin/products/create-product";
 import {UpdateProduct} from "../../../contracts/admin/products/update-product";
 import {HttpErrorResponse} from "@angular/common/http";
-import {ListProduct} from "../../../contracts/admin/products/list-product";
+import { ProductListDto} from "../../../contracts/admin/products/list-product";
+import {PaginationDto} from "../../../contracts/common/pagination-dto";
+import {PagedResultDto} from "../../../contracts/common/paged-result-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -35,19 +37,22 @@ export class ProductService {
     return this.httpClientService.post({controller: "product"}, product)
   }
 
-  async get(successCallBack?: () => void, errorCallBack?: (errorMessage: any) => void): Promise<ListProduct[] | undefined> {
-    const products = this.httpClientService.get<ListProduct[]>({controller: "product"}).toPromise();
-    if (errorCallBack) {
-      if (successCallBack) {
-        products.then(d => successCallBack())
-          .catch((errorResponse: HttpErrorResponse) => errorCallBack(errorResponse.message))
-      }
-    }
+  async get(pagination: PaginationDto, successCallBack?: () => void, errorCallBack?: (errorMessage: any) => void): Promise<PagedResultDto<ProductListDto[]> | undefined> {
+    const products = this.httpClientService.get<PagedResultDto<ProductListDto[]>>({
+      controller: "product",
+      queryString: `page=${pagination.page}&size=${pagination.size}`
+    }).toPromise();
+
+    // @ts-ignore
+    products.then(d => successCallBack())
+      // @ts-ignore
+      .catch((errorResponse: HttpErrorResponse) => errorCallBack(errorResponse.message))
+
     return await products;
   }
 
-  async getById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: any) => void): Promise<ListProduct | undefined> {
-    const products = this.httpClientService.get<ListProduct>({controller: "product"}, id).toPromise();
+  async getById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: any) => void): Promise<ProductListDto | undefined> {
+    const products = this.httpClientService.get<ProductListDto>({controller: "product"}, id).toPromise();
     if (errorCallBack) {
       if (successCallBack) {
         products.then(d => successCallBack())

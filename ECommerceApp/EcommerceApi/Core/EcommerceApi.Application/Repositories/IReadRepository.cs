@@ -30,4 +30,10 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// </summary>
     /// <returns></returns>
     Task<TEntity?> GetByIdAsync(string id,bool tracking = true);
+    
+    /// <summary>
+    /// Get All Entities
+    /// </summary>
+    /// <returns>TEntity</returns>
+    Task<int> GetCount(bool tracking = true);
 }

@@ -5,8 +5,6 @@ import {ModalMode} from "../../../../base/modal-mode";
 import {ProductService} from "../../../../services/common/modules/product.service";
 import {CreateProduct} from "../../../../contracts/admin/products/create-product";
 import {spinnerType} from "../../../../base/spinnerType";
-import {MatTableDataSource} from "@angular/material/table";
-import {ListProduct} from "../../../../contracts/admin/products/list-product";
 
 @Component({
   selector: 'app-create-edit-product',

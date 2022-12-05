@@ -1,4 +1,4 @@
-﻿export class ListProduct {
+﻿export class ProductListDto {
   id: number | undefined;
   name: string | undefined;
   stock: number | undefined;

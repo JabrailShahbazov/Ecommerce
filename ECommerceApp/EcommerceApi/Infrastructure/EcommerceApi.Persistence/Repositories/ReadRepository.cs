@@ -49,4 +49,12 @@ public class ReadRepository<TEntity> : IReadRepository<TEntity> where TEntity : 
 
         return await query.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
     }
+
+    public async Task<int> GetCount(bool tracking = true)
+    {
+        var query = Table.AsQueryable();
+        if (!tracking) query = query.AsNoTracking();
+
+        return await query.CountAsync();
+    }
 }
