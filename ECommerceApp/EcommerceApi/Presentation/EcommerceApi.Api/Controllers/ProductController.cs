@@ -25,13 +25,21 @@ namespace EcommerceApi.Api.Controllers
         {
             var products = _productReadRepository.GetAll(false);
 
-            return Ok(await products.ToListAsync());
+            return Ok(await products.Select(p => new
+            {
+                p.Id,
+                p.Name,
+                p.Stock,
+                p.Price,
+                p.CreateDate,
+                p.UpdatedDate
+            }).OrderByDescending(o =>o.CreateDate).ToListAsync());
         }
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            return Ok(await _productReadRepository.GetByIdAsync(id,false));
+            return Ok(await _productReadRepository.GetByIdAsync(id, false));
         }
 
         [HttpPost]
