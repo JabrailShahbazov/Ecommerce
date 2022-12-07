@@ -5,6 +5,7 @@ import {ModalMode} from "../../../../base/modal-mode";
 import {ProductService} from "../../../../services/common/modules/product.service";
 import {CreateProduct} from "../../../../contracts/admin/products/create-product";
 import {spinnerType} from "../../../../base/spinnerType";
+import {UpdateProduct} from "../../../../contracts/admin/products/update-product";
 
 @Component({
   selector: 'app-create-edit-product',
@@ -40,12 +41,12 @@ export class CreateEditProductComponent extends BaseComponent implements OnInit 
     this.input = new CreateProduct()
     if (this.mode == ModalMode.Edit || this.mode == ModalMode.Details) {
       if (id) {
-          this.getById(id);
+        this.getById(id);
       } else {
         this.toastrService.error('Id is not')
         this.close()
       }
-    }else {
+    } else {
       this.openDialog();
     }
   }
@@ -77,6 +78,30 @@ export class CreateEditProductComponent extends BaseComponent implements OnInit 
 
   save() {
     this.showSpinner(spinnerType.BallAtom)
+    if (this.mode == ModalMode.Create) {
+      this.create()
+    } else {
+        this.update()
+    }
+  }
+
+  private update() {
+    let update = new UpdateProduct()
+
+    update = Object.assign(this.input, update)
+    update.id = this.id
+    this.productService.update(update, () => {
+      this.hideSpinner(spinnerType.BallAtom)
+      this.toastrService.success("Success")
+      this.close()
+      this.onSave.emit()
+    }, errorMessage => {
+      this.hideSpinner(spinnerType.BallAtom)
+      this.toastrService.error(errorMessage)
+    })
+  }
+
+  private create() {
     this.productService.create(this.input, () => {
       this.hideSpinner(spinnerType.BallAtom)
       this.toastrService.success("Success")

@@ -5,10 +5,10 @@ import {MatTableDataSource} from "@angular/material/table";
 import {ProductListDto} from "../../../contracts/admin/products/list-product";
 import {ProductService} from "../../../services/common/modules/product.service";
 import {spinnerType} from "../../../base/spinnerType";
-import {DatePipe} from "@angular/common";
 import {PaginationDto} from "../../../contracts/common/pagination-dto";
-import {PagedResultDto} from "../../../contracts/common/paged-result-dto";
 
+
+declare var $:any
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -22,7 +22,7 @@ export class ProductsComponent extends BaseComponent implements OnInit, AfterVie
   // @ts-ignore
   @ViewChild('secondDialog', {static: true}) secondDialog: TemplateRef<any>;
 
-  displayedColumns: string[] = ['name', 'stock', 'price', 'createDate', 'updateDate'];
+  displayedColumns: string[] = ['name', 'stock', 'price', 'createDate', 'updateDate', 'delete','update'];
 
   // @ts-ignore
   dataSource: MatTableDataSource<ListProduct> = null
@@ -66,4 +66,5 @@ export class ProductsComponent extends BaseComponent implements OnInit, AfterVie
   async pageChanged() {
     await this.getAllProducts()
   }
+
 }

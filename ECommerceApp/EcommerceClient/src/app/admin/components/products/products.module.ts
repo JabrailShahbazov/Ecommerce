@@ -14,6 +14,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
+import {DeleteDirective} from "../../../directives/admin/delete.directive";
 
 const routes: Routes = [
   {path: "", component: ProductsComponent}
@@ -22,7 +23,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ProductsComponent,
-    CreateEditProductComponent
+    CreateEditProductComponent,
+    DeleteDirective
   ],
   imports: [
     CommonModule,

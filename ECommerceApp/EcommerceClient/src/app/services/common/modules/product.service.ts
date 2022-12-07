@@ -3,9 +3,10 @@ import {HttpClientService} from "../http-client.service";
 import {CreateProduct} from "../../../contracts/admin/products/create-product";
 import {UpdateProduct} from "../../../contracts/admin/products/update-product";
 import {HttpErrorResponse} from "@angular/common/http";
-import { ProductListDto} from "../../../contracts/admin/products/list-product";
+import {ProductListDto} from "../../../contracts/admin/products/list-product";
 import {PaginationDto} from "../../../contracts/common/pagination-dto";
 import {PagedResultDto} from "../../../contracts/common/paged-result-dto";
+import {firstValueFrom} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -33,8 +34,22 @@ export class ProductService {
       });
   }
 
-  update(product: UpdateProduct) {
-    return this.httpClientService.post({controller: "product"}, product)
+  update(product: UpdateProduct, successCallBack?: any, errorCallBack?: (errorMessage: any) => void) {
+    this.httpClientService.put({controller: "product"}, product)
+      .subscribe(data => {
+        successCallBack()
+      }, (errorResponse: HttpErrorResponse) => {
+        const _error: Array<{ key: string, value: Array<string> }> = errorResponse.error;
+        let message = ''
+        _error.forEach((v, index) => {
+          v.value.forEach((_v, _index) => {
+            message += `${_v}, \n`
+          });
+        });
+        if (errorCallBack) {
+          errorCallBack(message)
+        }
+      });
   }
 
   async get(pagination: PaginationDto, successCallBack?: () => void, errorCallBack?: (errorMessage: any) => void): Promise<PagedResultDto<ProductListDto[]> | undefined> {
@@ -61,4 +76,5 @@ export class ProductService {
     }
     return await products;
   }
+
 }
