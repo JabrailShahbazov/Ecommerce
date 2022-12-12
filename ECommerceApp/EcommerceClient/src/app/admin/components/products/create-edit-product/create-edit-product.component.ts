@@ -6,6 +6,7 @@ import {ProductService} from "../../../../services/common/modules/product.servic
 import {CreateProduct} from "../../../../contracts/admin/products/create-product";
 import {spinnerType} from "../../../../base/spinnerType";
 import {UpdateProduct} from "../../../../contracts/admin/products/update-product";
+import {FileUploadOptions} from "../../../../services/common/file-upload/file-upload.component";
 
 @Component({
   selector: 'app-create-edit-product',
@@ -18,6 +19,13 @@ export class CreateEditProductComponent extends BaseComponent implements OnInit 
   @ViewChild('secondDialog', {static: true}) secondDialog: TemplateRef<any>;
 
   @Output() onSave = new EventEmitter<any>();
+
+  @Output() fileUploadOptions: Partial<FileUploadOptions> = {
+    controller: 'product',
+    action: 'upload',
+    explanation: 'Drop and Add Images',
+    accept:'.png, .jpg, .jpeg, .json'
+  }
 
   mode: ModalMode | undefined;
 
@@ -81,7 +89,7 @@ export class CreateEditProductComponent extends BaseComponent implements OnInit 
     if (this.mode == ModalMode.Create) {
       this.create()
     } else {
-        this.update()
+      this.update()
     }
   }
 

@@ -26,6 +26,14 @@
         </mat-form-field>
       </div>
 
+      <div class="col-md-12">
+       <div class="row">
+         <div class="col-md-6">
+           <app-file-upload [options]="fileUploadOptions"></app-file-upload>
+         </div>
+       </div>
+      </div>
+
     </div>
 
   </div>
@@ -34,4 +42,5 @@
     <button mat-button (click)="close()">No Thanks</button>
     <button mat-button cdkFocusInitial (click)="save()">Save</button>
   </div>
+
 </ng-template>

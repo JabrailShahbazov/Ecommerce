@@ -15,6 +15,7 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
 import {DeleteDirective} from "../../../directives/admin/delete.directive";
+import {FileUploadModule} from "../../../services/common/file-upload/file-upload.module";
 
 const routes: Routes = [
   {path: "", component: ProductsComponent}
@@ -39,7 +40,8 @@ const routes: Routes = [
     MatInputModule,
     FormsModule,
     MatPaginatorModule,
-    MatTableModule
+    MatTableModule,
+    FileUploadModule
   ]
 })
 export class ProductsModule {
