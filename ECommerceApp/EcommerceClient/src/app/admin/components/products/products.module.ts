@@ -16,6 +16,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
 import {DeleteDirective} from "../../../directives/admin/delete.directive";
 import {FileUploadModule} from "../../../services/common/file-upload/file-upload.module";
+import {DialogModule} from "../../../dialogs/dialog.module";
 
 const routes: Routes = [
   {path: "", component: ProductsComponent}
@@ -41,7 +42,8 @@ const routes: Routes = [
     FormsModule,
     MatPaginatorModule,
     MatTableModule,
-    FileUploadModule
+    FileUploadModule,
+    DialogModule
   ]
 })
 export class ProductsModule {
