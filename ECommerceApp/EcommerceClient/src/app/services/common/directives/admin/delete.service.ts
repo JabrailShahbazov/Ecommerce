@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClientService} from "../../http-client.service";
 import {firstValueFrom} from "rxjs";
+import {DialogService} from "../../dialog.service";
 
 @Injectable({
   providedIn: 'root'

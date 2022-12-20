@@ -2,6 +2,8 @@ import {Directive, ElementRef, EventEmitter, HostListener, Injector, Input, Outp
 import {BaseComponent} from "../../base/base.component";
 import {DeleteService} from "../../services/common/directives/admin/delete.service";
 import {spinnerType} from "../../base/spinnerType";
+import {DialogService} from "../../services/common/dialog.service";
+import {FileUploadDialogComponent, FileUploadDialogState} from "../../dialogs/file-upload-dialog/file-upload-dialog.component";
 
 declare var $: any
 
@@ -16,6 +18,7 @@ export class DeleteDirective extends BaseComponent {
   constructor(injector: Injector,
               private element: ElementRef,
               private _render: Renderer2,
+              private dialogService: DialogService,
               private httpClientService: DeleteService) {
     super(injector)
     const btn = _render.createElement('button')
@@ -27,15 +30,27 @@ export class DeleteDirective extends BaseComponent {
 
   @HostListener('click')
   onClick() {
-    const td: HTMLTableCellElement = this.element.nativeElement
-    this.httpClientService.delete(this.id, this.controller,() => {
-      this.toastrService.success("Deleted Element")
-      $(td.parentElement).fadeOut(1000,()=>{
-        this.callBack.emit()
-      })
-    }, err => {
-      this.hideSpinner(spinnerType.BallAtom)
-      console.log(err)
+    this.dialogService.openDialog({
+      componentType: FileUploadDialogComponent,
+      data: DeleteDialogState.Yes,
+      afterClosed: () => {
+        const td: HTMLTableCellElement = this.element.nativeElement
+        this.httpClientService.delete(this.id, this.controller, () => {
+          this.toastrService.success("Deleted Element")
+          $(td.parentElement).fadeOut(1000, () => {
+            this.callBack.emit()
+          })
+        }, err => {
+          this.hideSpinner(spinnerType.BallAtom)
+          console.log(err)
+        })
+      }
     })
+
   }
+
+}
+
+export enum DeleteDialogState {
+  Yes, No
 }

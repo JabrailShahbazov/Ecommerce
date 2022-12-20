@@ -1,9 +1,7 @@
-import {Component, Injector, Input, OnInit} from '@angular/core';
+import {Component, Inject, Injector} from '@angular/core';
 import {BaseDialog} from "../base/base-dialog";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {HttpClientService} from "../../services/common/http-client.service";
-import {NgxFileDropEntry} from "ngx-file-drop";
-import {FileUploadOptions} from "../../services/common/file-upload/file-upload.component";
 
 @Component({
   selector: 'app-file-upload-dialog',
@@ -13,12 +11,12 @@ import {FileUploadOptions} from "../../services/common/file-upload/file-upload.c
 export class FileUploadDialogComponent extends BaseDialog<FileUploadDialogComponent> {
 
   constructor(injector: Injector,
+              @Inject(MAT_DIALOG_DATA) public data : FileUploadDialogState,
               private httpClientService: HttpClientService) {
     super(injector);
   }
 
-  public files: NgxFileDropEntry[];
-
-  @Input() options: Partial<FileUploadOptions>
-
+}
+export  enum FileUploadDialogState{
+  Yes,No
 }

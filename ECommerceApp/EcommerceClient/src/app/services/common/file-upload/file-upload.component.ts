@@ -3,6 +3,9 @@ import {FileSystemFileEntry, NgxFileDropEntry} from "ngx-file-drop";
 import {HttpClientService} from "../http-client.service";
 import {HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {BaseComponent} from "../../../base/base.component";
+import {MatDialog} from "@angular/material/dialog";
+import {FileUploadDialogComponent, FileUploadDialogState} from "../../../dialogs/file-upload-dialog/file-upload-dialog.component";
+import {DialogService} from "../dialog.service";
 
 @Component({
   selector: 'app-file-upload',
@@ -12,7 +15,9 @@ import {BaseComponent} from "../../../base/base.component";
 export class FileUploadComponent extends BaseComponent implements OnInit {
 
   constructor(injector: Injector,
-              private httpClientService: HttpClientService) {
+              private httpClientService: HttpClientService,
+              private dialogService: DialogService,
+              private dialog :MatDialog) {
     super(injector)
   }
 
@@ -30,20 +35,25 @@ export class FileUploadComponent extends BaseComponent implements OnInit {
       for (let file of files) {
         (file.fileEntry as FileSystemFileEntry).file((_file: File) => {
           fileData.append(_file.name, _file, file.relativePath);
-
-
         });
       }
-debugger
-      this.httpClientService.post({
-        controller: this.options.controller,
-        action: this.options.action,
-        headers: new HttpHeaders({'responseType': 'blob'})
-      }, fileData).subscribe(data => {
-        this.toastrService.success("Your Files Added")
-      }, (errorResponse: HttpErrorResponse) => {
-        this.toastrService.error(errorResponse.message)
-      })
+
+      this.dialogService.openDialog({
+        componentType:FileUploadDialogComponent,
+        data:FileUploadDialogState.Yes,
+        afterClosed:()=>{
+          this.httpClientService.post({
+            controller: this.options.controller,
+            action: this.options.action,
+            headers: new HttpHeaders({'responseType': 'blob'})
+          }, fileData).subscribe(data => {
+            this.toastrService.success("Your Files Added")
+          }, (errorResponse: HttpErrorResponse) => {
+            this.toastrService.error(errorResponse.message)
+          })
+        }
+      });
+
     }
   }
 
