@@ -15,6 +15,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// Get Entity with from operation
     /// </summary>
     /// <param name="method"></param>
+    /// <param name="tracking"></param>
     /// <returns>TEntity</returns>
     IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method,bool tracking = true);
 
@@ -22,6 +23,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     ///  Get Single entity
     /// </summary>
     /// <param name="method"></param>
+    /// <param name="tracking"></param>
     /// <returns>TEntity</returns>
     Task<TEntity?> GetSingleAsync(Expression<Func<TEntity, bool>> method,bool tracking = true);
 
