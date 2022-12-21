@@ -1,6 +1,7 @@
 ﻿using EcommerceApi.Domain.Entities;
 using EcommerceApi.Domain.Entities.Common.Concrete;
 using Microsoft.EntityFrameworkCore;
+using File = EcommerceApi.Domain.Entities.File;
 
 namespace Ecommerce.Persistence.Contexts;
 
@@ -15,6 +16,12 @@ public class EcommerceDbContext : DbContext
     public DbSet<Order> Orders { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
+
+    public DbSet<File> Files { get; set; }
+
+    public DbSet<ProductImageFile> ProductImageFiles { get; set; }
+
+    public DbSet<InvoiceFile> InvoiceFiles { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

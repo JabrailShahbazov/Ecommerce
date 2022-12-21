@@ -33,7 +33,7 @@ public class FileService : IFileService
 
     async Task<string> FileRenameAsync(string path, string fileName, bool first = true)
     {
-        string newFileName = await Task.Run<string>(async () =>
+        string newFileName = await Task.Run(async () =>
         {
             string extension = Path.GetExtension(fileName);
             string newFileName;
@@ -54,11 +54,9 @@ public class FileService : IFileService
                     {
                         var lastIndex = indexNo1;
                         indexNo1 = newFileName.IndexOf("-", indexNo1 + 1, StringComparison.Ordinal);
-                        if (indexNo1 == -1)
-                        {
-                            indexNo1 = lastIndex;
-                            break;
-                        }
+                        if (indexNo1 != -1) continue;
+                        indexNo1 = lastIndex;
+                        break;
                     }
 
                     int indexNo2 = newFileName.IndexOf(".", StringComparison.Ordinal);
@@ -97,7 +95,7 @@ public class FileService : IFileService
             string fileNewName = await FileRenameAsync(uploadPath, file.FileName);
 
             bool result = await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
-            datas.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
+            datas.Add((fileNewName, $"{path}\\{fileNewName}"));
             results.Add(result);
         }
 

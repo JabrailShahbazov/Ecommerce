@@ -6,6 +6,7 @@ import {BaseComponent} from "../../../base/base.component";
 import {MatDialog} from "@angular/material/dialog";
 import {FileUploadDialogComponent, FileUploadDialogState} from "../../../dialogs/file-upload-dialog/file-upload-dialog.component";
 import {DialogService} from "../dialog.service";
+import {spinnerType} from "../../../base/spinnerType";
 
 @Component({
   selector: 'app-file-upload',
@@ -17,7 +18,7 @@ export class FileUploadComponent extends BaseComponent implements OnInit {
   constructor(injector: Injector,
               private httpClientService: HttpClientService,
               private dialogService: DialogService,
-              private dialog :MatDialog) {
+              private dialog: MatDialog) {
     super(injector)
   }
 
@@ -31,24 +32,28 @@ export class FileUploadComponent extends BaseComponent implements OnInit {
   public selectedFiles(files: NgxFileDropEntry[]) {
     this.files = files;
     for (const droppedFile of files) {
-      const fileData: FormData = new FormData()
-      for (let file of files) {
-        (file.fileEntry as FileSystemFileEntry).file((_file: File) => {
-          fileData.append(_file.name, _file, file.relativePath);
-        });
-      }
-
       this.dialogService.openDialog({
-        componentType:FileUploadDialogComponent,
-        data:FileUploadDialogState.Yes,
-        afterClosed:()=>{
+        componentType: FileUploadDialogComponent,
+        data: FileUploadDialogState.Yes,
+        afterClosed: () => {
+
+          this.showSpinner(spinnerType.BallAtom);
+          const fileData: FormData = new FormData()
+          for (let file of files) {
+            (file.fileEntry as FileSystemFileEntry).file((_file: File) => {
+              fileData.append(_file.name, _file, file.relativePath);
+            });
+          }
+
           this.httpClientService.post({
             controller: this.options.controller,
             action: this.options.action,
             headers: new HttpHeaders({'responseType': 'blob'})
           }, fileData).subscribe(data => {
             this.toastrService.success("Your Files Added")
+            this.hideSpinner(spinnerType.BallAtom);
           }, (errorResponse: HttpErrorResponse) => {
+            this.hideSpinner(spinnerType.BallAtom);
             this.toastrService.error(errorResponse.message)
           })
         }
