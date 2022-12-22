@@ -1,7 +1,9 @@
 using Ecommerce.Application.Validators.Products;
 using Ecommerce.Infrastructure;
 using Ecommerce.Infrastructure.Filters;
+using Ecommerce.Infrastructure.Services.Storage.Azure;
 using Ecommerce.Persistence;
+using EcommerceApi.Domain.Enums;
 using FluentValidation.AspNetCore;
 
 #region WebApplication Builder
@@ -9,6 +11,7 @@ using FluentValidation.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
+builder.Services.AddStorage<AzureStorage>();
 
 builder.Services.AddCors(options =>
 {
