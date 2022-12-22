@@ -15,11 +15,11 @@ public static class ServiceRegistration
     }
 
     // //Best Practice
-    public static void AddStorage<T>(this IServiceCollection services) where T : class,IStorage
+    public static void AddStorage<T>(this IServiceCollection services) where T : Storage, IStorage
     {
         services.AddScoped<IStorage, T>();
     }
-    
+
     //It's not Practice
     public static void AddStorage(this IServiceCollection services, StorageType storageType)
     {
