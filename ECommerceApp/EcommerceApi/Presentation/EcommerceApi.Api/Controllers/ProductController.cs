@@ -39,7 +39,7 @@ namespace EcommerceApi.Api.Controllers
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
-            
+
             _fileWriteRepository = fileWriteRepository;
             _productImageFileReadRepository = productImageFileReadRepository;
             _productImageFileWriteRepository = productImageFileWriteRepository;
@@ -116,17 +116,22 @@ namespace EcommerceApi.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload()
+        public async Task<IActionResult> Upload([FromQuery]  string id)
         {
-           var datas = await _storageService.UploadAsync("product-images", Request.Form.Files);
-           await _productImageFileWriteRepository.AddManyAsync(datas.Select(d => new ProductImageFile()
-           {
-               FileName = d.fileName,
-               Path = d.source,
-               StorageType = _storageService.StorageType
-           }).ToList());
+            var datas = await _storageService.UploadAsync("photo-images", Request.Form.Files);
 
-           await _productImageFileWriteRepository.SaveAsync();
+            var products = await _productReadRepository.GetByIdAsync(id);
+
+
+            await _productImageFileWriteRepository.AddManyAsync(datas.Select(d => new ProductImageFile()
+            {
+                FileName = d.fileName,
+                Path = d.source,
+                StorageType = _storageService.StorageType,
+                Product = new List<Product>() { products }
+            }).ToList());
+
+            await _productImageFileWriteRepository.SaveAsync();
             return Ok();
         }
     }

@@ -33,7 +33,7 @@ public class StorageService : IStorageService
             var storageType = name switch
             {
                 "LocalStorage" => StorageType.Storage,
-                "Azure" => StorageType.Azure,
+                "AzureStorage" => StorageType.Azure,
                 "AWS" => StorageType.AWS,
                 _ => StorageType.Storage
             };

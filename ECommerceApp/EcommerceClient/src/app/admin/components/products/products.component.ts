@@ -6,9 +6,12 @@ import {ProductListDto} from "../../../contracts/admin/products/list-product";
 import {ProductService} from "../../../services/common/modules/product.service";
 import {spinnerType} from "../../../base/spinnerType";
 import {PaginationDto} from "../../../contracts/common/pagination-dto";
+import {DialogService} from "../../../services/common/dialog.service";
+import {SelectProductImageDialogComponent} from "../../../dialogs/select-product-image-dialog/select-product-image-dialog.component";
 
 
-declare var $:any
+declare var $: any
+
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -22,13 +25,14 @@ export class ProductsComponent extends BaseComponent implements OnInit, AfterVie
   // @ts-ignore
   @ViewChild('secondDialog', {static: true}) secondDialog: TemplateRef<any>;
 
-  displayedColumns: string[] = ['name', 'stock', 'price', 'createDate', 'updateDate', 'delete','update'];
+  displayedColumns: string[] = ['name', 'stock', 'price', 'createDate', 'updateDate', 'delete', 'photos', 'update'];
 
   // @ts-ignore
   dataSource: MatTableDataSource<ListProduct> = null
 
   constructor(injector: Injector,
-              private productService: ProductService) {
+              private productService: ProductService,
+              private dialogService: DialogService) {
     super(injector);
   }
 
@@ -67,4 +71,13 @@ export class ProductsComponent extends BaseComponent implements OnInit, AfterVie
     await this.getAllProducts()
   }
 
+  addProductImage(id: string) {
+    this.dialogService.openDialog({
+      componentType: SelectProductImageDialogComponent,
+      data: id,
+      options: {
+        width: "1400px"
+      }
+    })
+  }
 }

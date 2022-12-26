@@ -48,7 +48,8 @@ export class FileUploadComponent extends BaseComponent implements OnInit {
           this.httpClientService.post({
             controller: this.options.controller,
             action: this.options.action,
-            headers: new HttpHeaders({'responseType': 'blob'})
+            headers: new HttpHeaders({'responseType': 'blob'}),
+            queryString:this.options.queryString
           }, fileData).subscribe(data => {
             this.toastrService.success("Your Files Added")
             this.hideSpinner(spinnerType.BallAtom);

@@ -26,4 +26,15 @@
       <Folder Include="wwwroot" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\resource\product-images\ayaqqabi-2.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\product-images\ayaqqabi-3.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\product-images\Game-2.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\product-images\Game-3.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\product-images\Game.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\product-images\NewKeyboard-2.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\product-images\NewKeyboard-3.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\resource\product-images\NewKeyboard.png" />
+    </ItemGroup>
+
 </Project>

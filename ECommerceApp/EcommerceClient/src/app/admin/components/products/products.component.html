@@ -46,7 +46,7 @@
           </ng-container>
 
 
-          <!-- icons Column -->
+          <!-- delete Column -->
           <ng-container matColumnDef="delete">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let element" [id]="element.id" [controller]="'product'" appDelete (callBack) ='getAllProducts()'>
@@ -55,6 +55,15 @@
             </td>
           </ng-container>
 
+          <!-- photos Column -->
+          <ng-container matColumnDef="photos">
+            <th mat-header-cell *matHeaderCellDef> </th>
+            <td mat-cell *matCellDef="let element">
+             <img (click)="addProductImage(element.id)" src="../../../../assets/image_list.png" style="cursor: pointer" width="25px" height="25px">
+            </td>
+          </ng-container>
+
+          <!-- update Column -->
           <ng-container matColumnDef="update">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let element">

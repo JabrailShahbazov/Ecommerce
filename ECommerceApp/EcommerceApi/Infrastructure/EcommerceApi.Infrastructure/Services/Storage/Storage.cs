@@ -2,58 +2,62 @@
 
 namespace Ecommerce.Infrastructure.Services.Storage;
 
-public class Storage
-{
-    protected delegate bool HasFile(string source, string fileName);
-
-    protected async Task<string> FileRenameAsync(string source, string fileName, HasFile hasFileMethod, bool first = true)
+   public class Storage
     {
-        string newFileName = await Task.Run(async () =>
+        protected delegate bool HasFile(string pathOrContainerName, string fileName);
+        protected async Task<string> FileRenameAsync(string pathOrContainerName, string fileName, HasFile hasFileMethod, bool first = true)
         {
-            string extension = Path.GetExtension(fileName);
-            string newFileName;
-            if (first)
+            string newFileName = await Task.Run<string>(async () =>
             {
-                string oldName = Path.GetFileNameWithoutExtension(fileName);
-                newFileName = $"{NameOperation.CharacterRegulatory(oldName)}{extension}";
-            }
-            else
-            {
-                newFileName = fileName;
-                int indexNo1 = newFileName.IndexOf("-", StringComparison.Ordinal);
-                if (indexNo1 == -1)
-                    newFileName = $"{Path.GetFileNameWithoutExtension(newFileName)}-2{extension}";
+                string extension = Path.GetExtension(fileName);
+                string newFileName;
+                if (first)
+                {
+                    string oldName = Path.GetFileNameWithoutExtension(fileName);
+                    newFileName = $"{NameOperation.CharacterRegulatory(oldName)}{extension}";
+                }
                 else
                 {
-                    while (true)
-                    {
-                        var lastIndex = indexNo1;
-                        indexNo1 = newFileName.IndexOf("-", indexNo1 + 1, StringComparison.Ordinal);
-                        if (indexNo1 != -1) continue;
-                        indexNo1 = lastIndex;
-                        break;
-                    }
-
-                    int indexNo2 = newFileName.IndexOf(".", StringComparison.Ordinal);
-                    string fileNo = newFileName.Substring(indexNo1 + 1, indexNo2 - indexNo1 - 1);
-
-                    if (int.TryParse(fileNo, out int fileHelper))
-                    {
-                        fileHelper++;
-                        newFileName = newFileName.Remove(indexNo1 + 1, indexNo2 - indexNo1 - 1)
-                            .Insert(indexNo1 + 1, fileHelper.ToString());
-                    }
-                    else
+                    newFileName = fileName;
+                    int indexNo1 = newFileName.IndexOf("-", StringComparison.Ordinal);
+                    if (indexNo1 == -1)
                         newFileName = $"{Path.GetFileNameWithoutExtension(newFileName)}-2{extension}";
+                    else
+                    {
+                        int lastIndex = 0;
+                        while (true)
+                        {
+                            lastIndex = indexNo1;
+                            indexNo1 = newFileName.IndexOf("-", indexNo1 + 1, StringComparison.Ordinal);
+                            if (indexNo1 == -1)
+                            {
+                                indexNo1 = lastIndex;
+                                break;
+                            }
+                        }
+
+                        int indexNo2 = newFileName.IndexOf(".", StringComparison.Ordinal);
+                        string fileNo = newFileName.Substring(indexNo1 + 1, indexNo2 - indexNo1 - 1);
+
+                        if (int.TryParse(fileNo, out int fileNoResult))
+                        {
+                            fileNoResult++;
+                            newFileName = newFileName.Remove(indexNo1 + 1, indexNo2 - indexNo1 - 1)
+                                                .Insert(indexNo1 + 1, fileNoResult.ToString());
+                        }
+                        else
+                            newFileName = $"{Path.GetFileNameWithoutExtension(newFileName)}-2{extension}";
+
+                    }
                 }
-            }
 
-            if (hasFileMethod(source, newFileName))
-                return await FileRenameAsync(source, newFileName, hasFileMethod, false);
-            else
-                return newFileName;
-        });
+                //if (File.Exists($"{path}\\{newFileName}"))
+                if (hasFileMethod(pathOrContainerName, newFileName))
+                    return await FileRenameAsync(pathOrContainerName, newFileName, hasFileMethod, false);
+                else
+                    return newFileName;
+            });
 
-        return newFileName;
+            return newFileName;
+        }
     }
-}

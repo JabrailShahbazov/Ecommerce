@@ -11,8 +11,7 @@ import {HttpClientService} from "../../services/common/http-client.service";
 export class FileUploadDialogComponent extends BaseDialog<FileUploadDialogComponent> {
 
   constructor(injector: Injector,
-              @Inject(MAT_DIALOG_DATA) public data : FileUploadDialogState,
-              private httpClientService: HttpClientService) {
+              @Inject(MAT_DIALOG_DATA) public data : FileUploadDialogState) {
     super(injector);
   }
 
