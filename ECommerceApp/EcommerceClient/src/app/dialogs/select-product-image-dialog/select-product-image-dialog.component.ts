@@ -3,13 +3,15 @@ import {BaseDialog} from "../base/base-dialog";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {FileUploadDialogState} from "../file-upload-dialog/file-upload-dialog.component";
 import {FileUploadOptions} from "../../services/common/file-upload/file-upload.component";
+import {ProductService} from "../../services/common/modules/product.service";
+import {ListProductImage} from "../../contracts/admin/products/list-product-image";
 
 @Component({
   selector: 'app-select-product-image-dialog',
   templateUrl: './select-product-image-dialog.component.html',
   styleUrls: ['./select-product-image-dialog.component.scss']
 })
-export class SelectProductImageDialogComponent extends BaseDialog<SelectProductImageDialogComponent> {
+export class SelectProductImageDialogComponent extends BaseDialog<SelectProductImageDialogComponent> implements OnInit {
 
 
   @Output() options: Partial<FileUploadOptions> = {
@@ -21,8 +23,15 @@ export class SelectProductImageDialogComponent extends BaseDialog<SelectProductI
   }
 
   constructor(injector: Injector,
-              @Inject(MAT_DIALOG_DATA) public data: SelectProductImageState | string) {
+              @Inject(MAT_DIALOG_DATA) public data: SelectProductImageState | string,
+              private readonly productService: ProductService) {
     super(injector);
+  }
+
+  images: ListProductImage[] = []
+
+  async ngOnInit() {
+    this.images = await this.productService.getImages(this.data as string)
   }
 
 }

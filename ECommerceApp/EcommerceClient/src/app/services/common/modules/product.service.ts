@@ -6,7 +6,8 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {ProductListDto} from "../../../contracts/admin/products/list-product";
 import {PaginationDto} from "../../../contracts/common/pagination-dto";
 import {PagedResultDto} from "../../../contracts/common/paged-result-dto";
-import {firstValueFrom} from "rxjs";
+import {firstValueFrom, Observable} from "rxjs";
+import {ListProductImage} from "../../../contracts/admin/products/list-product-image";
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,15 @@ export class ProductService {
       }
     }
     return await products;
+  }
+
+  async getImages(id: string): Promise<[ListProductImage]> {
+    const getObservable: Observable<[ListProductImage]> = this.httpClientService.get<[ListProductImage]>({
+      action: "getproductimage",
+      controller: "product"
+    }, id);
+
+    return await firstValueFrom(getObservable);
   }
 
 }

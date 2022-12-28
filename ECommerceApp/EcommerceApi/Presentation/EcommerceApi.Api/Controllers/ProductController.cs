@@ -116,7 +116,7 @@ namespace EcommerceApi.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromQuery]  string id)
+        public async Task<IActionResult> Upload([FromQuery] string id)
         {
             var datas = await _storageService.UploadAsync("photo-images", Request.Form.Files);
 
@@ -133,6 +133,20 @@ namespace EcommerceApi.Api.Controllers
 
             await _productImageFileWriteRepository.SaveAsync();
             return Ok();
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetProductImage(string id)
+        {
+            var product = await _productReadRepository.Table.Include(p => p.ProductImageFiles)
+                .FirstOrDefaultAsync(s => s.Id == Guid.Parse(id));
+
+            return Ok(product?.ProductImageFiles
+                .Select(p => new
+                {
+                    p.Path,
+                    p.FileName
+                }));
         }
     }
 }
